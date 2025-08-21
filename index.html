@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BCH • BTC vs MSTR — Design Preview</title>
+  <style>
+    :root {
+      /* Palette inspired by Bitcoin Culture Hub (dark + orange) */
+      --bg: #0b0c0f;
+      --panel: #121318;
+      --panel-2: #0e0f13;
+      --border: #1e2230;
+      --text: #e9ecf2;
+      --muted: #a9b1c1;
+      --accent: #f7931a;  /* Bitcoin orange */
+      --accent-2: #ffb347; /* lighter orange for gradients */
+      --shadow: 0 12px 32px rgba(0,0,0,.35);
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Inter, Roboto, Helvetica, Arial;
+      color: var(--text);
+      background:
+        radial-gradient(900px 600px at 85% -10%, rgba(247,147,26,0.08), transparent 60%),
+        radial-gradient(800px 500px at 10% 0%, rgba(255,179,71,0.05), transparent 60%),
+        var(--bg);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    header { display:flex; justify-content:space-between; align-items:center; padding: 8px 0 16px; }
+    .brand { display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:.2px; }
+    .brand .b { width:12px; height:12px; border-radius:50%; background: linear-gradient(45deg, var(--accent), var(--accent-2)); box-shadow: 0 0 18px rgba(247,147,26,.6); }
+    .pill { font-size:12px; padding:4px 10px; border-radius:999px; border:1px solid var(--border); background: #0e0f12; color: var(--muted); }
+    .grid { display:grid; gap: 16px; }
+    .cols { grid-template-columns: 1fr; }
+    @media (min-width: 980px) {
+      .cols { grid-template-columns: 420px 1fr; align-items: start; }
+    }
+    .panel { background: var(--panel); border:1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .panel.pad { padding: 14px; }
+    .panel .heading { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+    .heading .title { font-weight:700; }
+    .sub { color: var(--muted); font-size: 13px; }
+    .badge { font-size: 11px; color:#0b0c0f; background: var(--accent); padding: 2px 8px; border-radius: 999px; }
+    .hero-iframe { width: 100%; height: 420px; border: none; border-radius: 12px; background: #0b0c0f; }
+    @media (min-width: 980px) { .hero-iframe { height: 460px; } }
+    .section-title { font-size: 18px; font-weight: 700; margin: 8px 0 14px; }
+    /* Cards for instruments */
+    .cards { display:grid; gap:16px; }
+    @media (min-width: 860px) { .cards { grid-template-columns: repeat(4, minmax(0,1fr)); } }
+    @media (max-width: 859px) { .cards { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+    .card { background: linear-gradient(180deg, var(--panel), var(--panel-2)); border:1px solid var(--border); border-radius: var(--radius); padding:16px; box-shadow: var(--shadow); position:relative; overflow:hidden; }
+    .card::after { content:""; position:absolute; inset:-1px; border-radius:inherit; background: radial-gradient(260px 140px at 120% -20%, rgba(247,147,26,.10), transparent 60%); pointer-events:none; }
+    .row { display:flex; align-items:flex-start; gap:10px; }
+    .icon { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center;
+             background: rgba(247,147,26,.12); border:1px solid rgba(247,147,26,.35); }
+    h3 { margin: 0 0 6px; font-size: 16px; }
+    .kicker { font-size:12px; color: var(--muted); }
+    ul { margin:8px 0 0 0; padding-left: 18px; }
+    li { margin:4px 0; }
+    .cta { display:flex; justify-content:center; margin-top: 28px; }
+    .btn { border-radius: 10px; border:1px solid var(--border); padding:10px 14px; background:#0e0f12; color: var(--text); cursor:pointer; }
+    .btn:hover { border-color: rgba(247,147,26,.6); box-shadow: 0 0 0 3px rgba(247,147,26,.12) inset; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand"><span class="b"></span> BCH • Strategy</div>
+      <span class="pill">Design Preview</span>
+    </header>
+
+    <!-- HERO: two-column layout (calc left, chart right) -->
+    <section class="grid cols">
+      <div class="panel pad">
+        <div class="heading">
+          <span class="title">Return Simulator</span>
+          <span class="badge">Free data</span>
+        </div>
+        <div class="sub">Compare BTC and MSTR returns. Choose dates and Lump Sum or DCA.</div>
+        <div style="margin-top:10px;">
+          <!-- Compact widget (preloaded MSTR data URL so it runs offline) -->
+          <btc-mstr-widget theme="dark" preset="ytd" mstr-url="data:application/json;base64,eyIyMDIwLTAxLTAyIjogMTQwLjEyLCAiMjAyMC0wNi0wMSI6IDE0NC4wNCwgIjIwMjEtMDEtMDQiOiA1MzEuNjQsICIyMDIxLTAyLTA5IjogMTI3Mi4wLCAiMjAyMi0xMS0yMSI6IDE2MC4wLCAiMjAyMy0wMS0wMyI6IDE0MS41NywgIjIwMjMtMTItMjkiOiA2ODkuMCwgIjIwMjQtMDMtMjciOiAxOTk5Ljk5LCAiMjAyNS0wMS0wMiI6IDEyNzAuMH0="></btc-mstr-widget>
+        </div>
+      </div>
+
+      <div class="panel pad">
+        <div class="heading">
+          <span class="title">BTC vs MSTR — Chart</span>
+          <span class="sub">Source: bitcointreasuries.net</span>
+        </div>
+        <iframe class="hero-iframe"
+          src="https://bitcointreasuries.net/embed?component=StockVsBitcoinChart&entityId=1"
+          title="Bitcoin Treasuries" credentialless></iframe>
+      </div>
+    </section>
+
+    <!-- Strategy Instruments -->
+    <section style="margin-top:18px;">
+      <div class="section-title">Strategy Instruments</div>
+      <div class="cards">
+        <!-- STRK -->
+        <div class="card">
+          <div class="row">
+            <div class="icon">📈</div>
+            <div>
+              <h3>STRK — “Strike” (Convertible, 8%)</h3>
+              <div class="kicker">What you get: 8% yield, plus option to convert to MSTR common at ~$119.</div>
+              <ul>
+                <li><strong>Risks:</strong> Non-cumulative, callable after 5 years.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- STRF -->
+        <div class="card">
+          <div class="row">
+            <div class="icon">🛡️</div>
+            <div>
+              <h3>STRF — “Strife” (Cumulative, 10%)</h3>
+              <div class="kicker">What you get: 10% fixed, cumulative payments owed even if skipped.</div>
+              <ul>
+                <li><strong>Priority:</strong> Senior-most preferred (just below debt).</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- STRD -->
+        <div class="card">
+          <div class="row">
+            <div class="icon">🐎</div>
+            <div>
+              <h3>STRD — “Stride” (Non-Cumulative, 10%)</h3>
+              <div class="kicker">What you get: 10% fixed, but non-cumulative — missed dividends vanish.</div>
+              <ul>
+                <li><strong>Risks:</strong> Junior to STRF; trades at a discount (11–12% effective yield).</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- STRC -->
+        <div class="card">
+          <div class="row">
+            <div class="icon">🪗</div>
+            <div>
+              <h3>STRC — “Stretch” (Variable, ~9–10%)</h3>
+              <div class="kicker">What you get: Monthly payout, adjustable to stabilize price near $100.</div>
+              <ul>
+                <li><strong>Special:</strong> Cumulative + dividend stopper.</li>
+                <li><strong>Collateral:</strong> ~$5 BTC reserves per $1 STRC.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta">
+        <button class="btn">Contact Strategy Team</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- ============== EMBEDDED WIDGET (no-build) ============== -->
+  <script>
+  (() => {
+    const WIDGET_TAG = 'btc-mstr-widget';
+    const toYMD = (d) => { const dt = new Date(d); dt.setHours(0,0,0,0); return dt.toISOString().slice(0,10); };
+    const addDays = (ds, n) => { const d = new Date(ds + 'T00:00:00'); d.setDate(d.getDate()+n); return toYMD(d); };
+    const startTs = (ds) => Math.floor(new Date(ds + 'T00:00:00').getTime()/1000);
+    const fmtUSD = (x) => (x==null || Number.isNaN(x)) ? '—' : x.toLocaleString(undefined,{style:'currency',currency:'USD',maximumFractionDigits:2});
+    const fmtPct = (x) => (x==null || Number.isNaN(x)) ? '—' : (x*100).toFixed(2) + '%';
+    const getPriceOnOrBefore = (ds,map) => { if(!map) return null; if(map[ds]!=null) return map[ds]; for(let i=1;i<=7;i++){ const p=addDays(ds,-i); if(map[p]!=null) return map[p]; } const ks=Object.keys(map).sort(); return ks.length? map[ks[0]]: null; };
+
+    const computeLump = ({amount,startDate,endDate,priceMap})=>{
+      const p0=getPriceOnOrBefore(startDate,priceMap), p1=getPriceOnOrBefore(endDate,priceMap);
+      if(!p0||!p1) return null;
+      const units = amount/p0, endVal = units*p1, ret=(endVal-amount)/amount;
+      const yrs=(new Date(endDate)-new Date(startDate))/(365.25*24*3600*1000);
+      const cagr = yrs>0? Math.pow(endVal/amount,1/yrs)-1:0;
+      return {units,endVal,totalRet:ret,cagr,invested:amount};
+    };
+
+    const genSched = ({startDate,endDate,frequency})=>{
+      const out=[]; if(new Date(endDate)<new Date(startDate)) return out;
+      if (frequency==='weekly'){ let d=startDate; while(new Date(d)<=new Date(endDate)){ out.push(d); d=addDays(d,7);} }
+      else if (frequency==='monthly'){ const sd=new Date(startDate+'T00:00:00'); let y=sd.getFullYear(), m=sd.getMonth(), day=sd.getDate(); while(true){ const d2=new Date(y,m,day); const ds=toYMD(d2); if(d2>new Date(endDate+'T00:00:00')) break; out.push(ds); m+=1; } }
+      else out.push(startDate);
+      return out;
+    };
+
+    const computeDCA = ({ totalBudget, perContribution, frequency, startDate, endDate, priceMap }) => {
+      const sched = genSched({startDate,endDate,frequency}); if(!sched.length) return null;
+      const fixed = perContribution || (totalBudget ? totalBudget/sched.length : 0);
+      let invested=0, units=0;
+      for(const d of sched){ const p=getPriceOnOrBefore(d,priceMap); if(!p) continue; const amt = perContribution ? fixed : totalBudget/sched.length; invested+=amt; units+=amt/p; }
+      const p1=getPriceOnOrBefore(endDate,priceMap); if(!p1) return null; const endVal=units*p1, ret=invested? (endVal-invested)/invested:0;
+      const yrs=(new Date(endDate)-new Date(startDate))/(365.25*24*3600*1000);
+      const cagr= invested>0&&yrs>0 ? Math.pow(endVal/invested,1/yrs)-1:0;
+      return { units, invested, endVal, totalRet:ret, cagr };
+    };
+
+    async function fetchCoinGeckoBTC(fromDate, toDate){
+      const url = `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart/range?vs_currency=usd&from=${startTs(fromDate)}&to=${startTs(toDate)+86399}`;
+      const res = await fetch(url);
+      if(!res.ok) throw new Error('BTC fetch failed');
+      const j = await res.json(); const map={}; (j.prices||[]).forEach(([ts,px])=>{ const ds=toYMD(ts); map[ds]=px; }); return map;
+    }
+
+    async function fetchJSON(url){ const res = await fetch(url, { cache:'no-store' }); if(!res.ok) throw new Error('Fetch failed'); return res.json(); }
+
+    function styleBlock(isDark){
+      return `<style>
+        :host { all: initial; }
+        .w { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Helvetica, Arial; ${isDark? 'color:#e5e7eb;background:#0b0b0c;' : 'color:#0b0b0c;background:#ffffff;border:1px solid #e5e7eb;'} display:block; border-radius:14px; }
+        .h { padding: 10px 12px; border-bottom: 1px solid ${isDark?'#1f2937':'#e5e7eb'}; font-weight: 600; font-size: 14px; }
+        .g { display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap:10px; padding: 10px 12px; }
+        .c { border:1px solid ${isDark?'#1f2937':'#e5e7eb'}; border-radius:12px; padding:8px; }
+        .t { font-size:11px; opacity:.7; margin-bottom:6px; }
+        input, select { width:100%; border-radius:8px; border:1px solid ${isDark?'#1f2937':'#d1d5db'}; background:${isDark?'#111214':'#fff'}; color: inherit; padding:6px 8px; outline:none; font-size:12px; }
+        table { width:100%; border-collapse: collapse; font-size: 12px; }
+        th, td { text-align:left; padding:6px 8px; border-bottom:1px solid ${isDark?'#1f2937':'#e5e7eb'}; }
+        .muted { font-size:11px; opacity:.65; }
+        .btn { font-size:10px; padding:4px 8px; border-radius:8px; border:1px solid ${isDark?'#1f2937':'#d1d5db'}; background:${isDark?'#111214':'#fff'}; cursor:pointer; }
+        .chips { display:flex; flex-wrap: wrap; gap:6px; margin-top:6px; }
+      </style>`;
+    }
+
+    class BTCMSTRWidget extends HTMLElement {
+      constructor(){ super(); this.root = this.attachShadow({ mode: 'open' }); }
+      connectedCallback(){ this.render(); this.load(); }
+
+      get theme(){ return (this.getAttribute('theme')||'dark'); }
+      get preset(){ return (this.getAttribute('preset')||''); }
+      get btcUrl(){ return this.getAttribute('btc-url')||''; }
+      get mstrUrl(){ return this.getAttribute('mstr-url')||''; }
+
+      state = {
+        startDate: '2020-01-01',
+        endDate: toYMD(new Date()),
+        mode: 'lump',
+        amountStr: '10000',
+        perStr: '500',
+        frequency: 'monthly',
+        btcMap: null,
+        mstrMap: null,
+        loading: false,
+        err: ''
+      };
+
+      applyPreset(){
+        const today = toYMD(new Date());
+        const set = (s) => { this.state.startDate = s; };
+        if (this.preset === 'ytd') set(toYMD(new Date(new Date().getFullYear(),0,1)));
+        if (this.preset === '1y') set(addDays(today, -365));
+        if (this.preset === '3y') set(addDays(today, -365*3));
+        if (this.preset === '5y') set(addDays(today, -365*5));
+        if (this.preset === 'since2017') set('2017-01-01');
+      }
+
+      async load(){
+        this.applyPreset();
+        this.state.loading = true; this.updateStatus();
+        try{
+          // BTC
+          let btcMap;
+          if (this.btcUrl) { btcMap = await fetchJSON(this.btcUrl); }
+          else { btcMap = await fetchCoinGeckoBTC(this.state.startDate, this.state.endDate); }
+
+          // MSTR
+          let mMap = {};
+          if (this.mstrUrl) { mMap = await fetchJSON(this.mstrUrl); }
+
+          this.state.btcMap = btcMap;
+          this.state.mstrMap = mMap;
+          this.state.err = '';
+        } catch(e){
+          this.state.err = (e && e.message) ? e.message : String(e);
+        } finally {
+          this.state.loading = false; this.updateStatus(); this.computeAndRenderResults();
+        }
+      }
+
+      render(){
+        this.root.innerHTML = '';
+        const wrap = document.createElement('div');
+        const isDark = this.theme !== 'light';
+        wrap.className = 'w';
+        wrap.innerHTML = `
+          ${styleBlock(isDark)}
+          <div class="h">BTC vs MSTR Calculator</div>
+          <div class="g">
+            <div class="c">
+              <div class="t">Date Range</div>
+              <div style="display:flex; gap:6px; align-items:center;">
+                <label class="muted" style="width:44px;">Start</label>
+                <input type="date" id="startDate" />
+              </div>
+              <div style="display:flex; gap:6px; align-items:center; margin-top:6px;">
+                <label class="muted" style="width:44px;">End</label>
+                <input type="date" id="endDate" />
+              </div>
+              <div class="chips">
+                <button class="btn" data-preset="ytd">YTD</button>
+                <button class="btn" data-preset="1y">1Y</button>
+                <button class="btn" data-preset="3y">3Y</button>
+                <button class="btn" data-preset="5y">5Y</button>
+                <button class="btn" data-preset="since2017">2017→</button>
+                <button class="btn" data-preset="today">End: Today</button>
+              </div>
+            </div>
+            <div class="c">
+              <div class="t">Investment & Mode</div>
+              <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+                <select id="mode">
+                  <option value="lump">Lump Sum</option>
+                  <option value="dca">DCA</option>
+                </select>
+                <label class="muted">Amount</label>
+                <input id="amount" inputmode="decimal" placeholder="10000" />
+                <div id="dcaFields" style="display:none; gap:6px; align-items:center;">
+                  <label class="muted">Per</label>
+                  <input id="per" inputmode="decimal" placeholder="500" />
+                  <select id="freq">
+                    <option value="monthly">Monthly</option>
+                    <option value="weekly">Weekly</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="c">
+              <div class="t">Status</div>
+              <div id="status" class="muted">Loading…</div>
+              <div id="err" style="color:#ef4444; font-size:11px; margin-top:6px;"></div>
+            </div>
+          </div>
+
+          <div class="c" style="margin: 0 10px 10px 10px;">
+            <div class="t">Results</div>
+            <div style="overflow-x:auto;">
+              <table>
+                <thead>
+                  <tr><th>Metric</th><th>BTC</th><th>MSTR</th></tr>
+                </thead>
+                <tbody id="rows"></tbody>
+              </table>
+            </div>
+          </div>
+        `;
+        this.root.appendChild(wrap);
+
+        // Wire inputs
+        const $ = (id) => this.root.getElementById(id);
+        $('startDate').value = this.state.startDate;
+        $('endDate').value = this.state.endDate;
+        $('mode').value = this.state.mode;
+        $('amount').value = this.state.amountStr;
+        $('per').value = this.state.perStr;
+        $('freq').value = this.state.frequency;
+
+        const showDCA = () => { this.root.getElementById('dcaFields').style.display = (this.state.mode==='dca') ? 'flex' : 'none'; };
+        showDCA();
+
+        $('startDate').addEventListener('change', e => { this.state.startDate = e.target.value; this.computeAndRenderResults(); this.loadBTCIfNeeded(); });
+        $('endDate').addEventListener('change', e => { this.state.endDate = e.target.value; this.computeAndRenderResults(); this.loadBTCIfNeeded(); });
+        $('mode').addEventListener('change', e => { this.state.mode = e.target.value; showDCA(); this.computeAndRenderResults(); });
+
+        // Number inputs as strings to avoid sticky leading 0
+        $('amount').addEventListener('input', e => { const v=e.target.value; if (v==='' || /^\d*\.?\d*$/.test(v)) { this.state.amountStr=v; this.computeAndRenderResults(); } });
+        $('per').addEventListener('input', e => { const v=e.target.value; if (v==='' || /^\d*\.?\d*$/.test(v)) { this.state.perStr=v; this.computeAndRenderResults(); } });
+        $('freq').addEventListener('change', e => { this.state.frequency = e.target.value; this.computeAndRenderResults(); });
+
+        // Presets
+        wrap.querySelectorAll('[data-preset]').forEach(btn => btn.addEventListener('click', (e) => {
+          const k = e.currentTarget.getAttribute('data-preset');
+          const today = toYMD(new Date());
+          if (k==='ytd') this.state.startDate = toYMD(new Date(new Date().getFullYear(),0,1));
+          if (k==='1y') this.state.startDate = addDays(today, -365);
+          if (k==='3y') this.state.startDate = addDays(today, -365*3);
+          if (k==='5y') this.state.startDate = addDays(today, -365*5);
+          if (k==='since2017') this.state.startDate = '2017-01-01';
+          if (k==='today') this.state.endDate = today;
+          $('startDate').value = this.state.startDate; $('endDate').value = this.state.endDate;
+          this.computeAndRenderResults(); this.loadBTCIfNeeded();
+        }));
+      }
+
+      updateStatus(){
+        const st = this.root.getElementById('status');
+        st.textContent = this.state.loading ? 'Loading…' : 'Ready';
+        const er = this.root.getElementById('err');
+        er.textContent = this.state.err || '';
+      }
+
+      async loadBTCIfNeeded(){
+        if (this.btcUrl || !this.state.startDate || !this.state.endDate) return;
+        try {
+          this.state.loading = true; this.updateStatus();
+          const map = await fetchCoinGeckoBTC(this.state.startDate, this.state.endDate);
+          this.state.btcMap = map; this.state.err='';
+        } catch(e){ this.state.err = (e && e.message) ? e.message : String(e); }
+        finally { this.state.loading = false; this.updateStatus(); this.computeAndRenderResults(); }
+      }
+
+      computeAndRenderResults(){
+        const amount = parseFloat(this.state.amountStr || '0') || 0;
+        const per    = parseFloat(this.state.perStr || '0') || 0;
+        const rowsEl = this.root.getElementById('rows');
+        if (!rowsEl) return;
+
+        const btc = (!this.state.btcMap) ? null : (this.state.mode==='lump' ?
+          computeLump({amount,startDate:this.state.startDate,endDate:this.state.endDate,priceMap:this.state.btcMap}) :
+          computeDCA({ totalBudget:amount, perContribution: (per||null), frequency:this.state.frequency, startDate:this.state.startDate, endDate:this.state.endDate, priceMap:this.state.btcMap })
+        );
+
+        const mstr = (!this.state.mstrMap || Object.keys(this.state.mstrMap).length===0) ? null : (this.state.mode==='lump' ?
+          computeLump({amount,startDate:this.state.startDate,endDate:this.state.endDate,priceMap:this.state.mstrMap}) :
+          computeDCA({ totalBudget:amount, perContribution: (per||null), frequency:this.state.frequency, startDate:this.state.startDate, endDate:this.state.endDate, priceMap:this.state.mstrMap })
+        );
+
+        const make = (label, b, m, fmt) => `<tr><td>${label}</td><td>${fmt(b)}</td><td>${fmt(m)}</td></tr>`;
+        rowsEl.innerHTML = [
+          make('Invested', btc?.invested, mstr?.invested, fmtUSD),
+          make('Units / Shares', btc?.units, mstr?.units, (x)=> x==null? '—': (x.toFixed? x.toFixed(6): '—')),
+          make('End Value', btc?.endVal, mstr?.endVal, fmtUSD),
+          make('Total Return', btc?.totalRet, mstr?.totalRet, fmtPct),
+          make('CAGR', btc?.cagr, mstr?.cagr, fmtPct)
+        ].join('');
+      }
+    }
+
+    if (!customElements.get(WIDGET_TAG)) customElements.define(WIDGET_TAG, BTCMSTRWidget);
+  })();
+  </script>
+</body>
+</html>
